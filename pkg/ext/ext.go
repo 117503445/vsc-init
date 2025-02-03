@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os/exec"
+	"strings"
 	"sync"
 
 	"github.com/117503445/goutils"
@@ -66,9 +67,19 @@ func queryExtsMeta() string {
 	return response
 }
 func getVscodeEngine() string {
-	// TODO: get vscode engine version by exec
-	const vscodeEngine = "1.91.1"
-	return vscodeEngine
+	cmds := []string{"code-server", "--version"}
+	outputByte, err := exec.Command(cmds[0], cmds[1:]...).Output()
+	if err != nil {
+		log.Fatal().Err(err).Msg("exec")
+	}
+	output := string(outputByte)
+	// 4.96.4 b7ef8f9bd70cb5b342fa8ec8a0086bad676d8124 with Code 1.96.4
+	items := strings.Split(output, " ")
+	ver := items[len(items)-1]
+	ver = strings.TrimSpace(ver)
+	log.Info().Str("vscodeEngine", ver).Msg("")
+
+	return ver
 }
 
 func isEngineValid(engine string, constraint string) (bool, error) {
@@ -142,7 +153,10 @@ func InstallLatestExts() {
 	}
 	log.Info().Interface("latestExtVers", latestExtVers).Interface("latestExtPublishers", latestExtPublishers).Interface("latestExtNames", latestExtNames).Msg("")
 
-	
+	getExtPath := func(ext string) string {
+		return "/tmp/exts/" + getExtFileName(ext, latestExtVers[ext])
+	}
+
 	taskCh := make(chan string)
 	var sg sync.WaitGroup
 	for i := 0; i < 5; i++ {
@@ -152,7 +166,7 @@ func InstallLatestExts() {
 			for ext := range taskCh {
 				url := fmt.Sprintf("https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/%v/extension/%v/%v/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage", latestExtPublishers[ext], latestExtNames[ext], latestExtVers[ext])
 
-				extPath := "/tmp/exts/" + getExtFileName(ext, latestExtVers[ext])
+				extPath := getExtPath(ext)
 				if !goutils.FileExists(extPath) {
 					log.Info().Str("url", url).Str("extPath", extPath).Msg("Downloading")
 					err = goutils.Download(url, extPath)
@@ -160,25 +174,27 @@ func InstallLatestExts() {
 						log.Fatal().Err(err).Msg("DownloadFile")
 					}
 				}
-				cmds := []string{"code-server", "--extensions-dir", "/root/.code-server-extensions", "--install-extension", extPath}
-				cmd := exec.Command(cmds[0], cmds[1:]...)
-				log.Info().Strs("cmds", cmds).Msg("")
-				err := cmd.Run()
-				if err != nil {
-					log.Fatal().Err(err).Msg("exec")
-				}
+
 			}
 			log.Info().Msg("Done")
 		}()
- 	}
+	}
 	for _, ext := range assets.Exts {
 		taskCh <- ext
 	}
 	close(taskCh)
 	sg.Wait()
 
-
-
+	for _, ext := range assets.Exts {
+		extPath := getExtPath(ext)
+		cmds := []string{"code-server", "--install-extension", extPath}
+		cmd := exec.Command(cmds[0], cmds[1:]...)
+		log.Info().Strs("cmds", cmds).Msg("")
+		err := cmd.Run()
+		if err != nil {
+			log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+		}
+	}
 
 }
 func getExtFileName(extName string, ver string) string {

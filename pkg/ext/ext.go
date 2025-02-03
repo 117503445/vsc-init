@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os/exec"
+	"sync"
 
 	"github.com/117503445/goutils"
 	"github.com/117503445/vsc-init/pkg/assets"
@@ -140,29 +142,44 @@ func InstallLatestExts() {
 	}
 	log.Info().Interface("latestExtVers", latestExtVers).Interface("latestExtPublishers", latestExtPublishers).Interface("latestExtNames", latestExtNames).Msg("")
 
-	// var localExtVers map[string]string
-	// if goutils.FileExists(fileExtVers) {
-	// 	err = goutils.ReadJSON(fileExtVers, &localExtVers)
-	// 	if err != nil {
-	// 		log.Fatal().Err(err).Msg("ReadJSON")
-	// 	}
-	// } else {
-	// 	localExtVers = map[string]string{}
-	// }
-	// log.Info().Interface("localExtVers", localExtVers).Msg("")
+	
+	taskCh := make(chan string)
+	var sg sync.WaitGroup
+	for i := 0; i < 5; i++ {
+		sg.Add(1)
+		go func() {
+			defer sg.Done()
+			for ext := range taskCh {
+				url := fmt.Sprintf("https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/%v/extension/%v/%v/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage", latestExtPublishers[ext], latestExtNames[ext], latestExtVers[ext])
 
-	for _, ext := range assets.Exts {
-		url := fmt.Sprintf("https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/%v/extension/%v/%v/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage", latestExtPublishers[ext], latestExtNames[ext], latestExtVers[ext])
-
-		extPath := "/tmp/exts/" + getExtFileName(ext, latestExtVers[ext])
-		if !goutils.FileExists(extPath) {
-			log.Info().Str("url", url).Str("extPath", extPath).Msg("Downloading")
-			err = goutils.Download(url, extPath)
-			if err != nil {
-				log.Fatal().Err(err).Msg("DownloadFile")
+				extPath := "/tmp/exts/" + getExtFileName(ext, latestExtVers[ext])
+				if !goutils.FileExists(extPath) {
+					log.Info().Str("url", url).Str("extPath", extPath).Msg("Downloading")
+					err = goutils.Download(url, extPath)
+					if err != nil {
+						log.Fatal().Err(err).Msg("DownloadFile")
+					}
+				}
+				cmds := []string{"code-server", "--extensions-dir", "/root/.code-server-extensions", "--install-extension", extPath}
+				cmd := exec.Command(cmds[0], cmds[1:]...)
+				log.Info().Strs("cmds", cmds).Msg("")
+				err := cmd.Run()
+				if err != nil {
+					log.Fatal().Err(err).Msg("exec")
+				}
 			}
-		}
+			log.Info().Msg("Done")
+		}()
+ 	}
+	for _, ext := range assets.Exts {
+		taskCh <- ext
 	}
+	close(taskCh)
+	sg.Wait()
+
+
+
+
 }
 func getExtFileName(extName string, ver string) string {
 	return fmt.Sprintf("%s-%s.vsix", extName, ver)

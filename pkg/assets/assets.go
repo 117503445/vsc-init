@@ -83,4 +83,7 @@ var Settings = `{
   "files.autoSave": "afterDelay",
   "workbench.iconTheme": "material-icon-theme",
   "redhat.telemetry.enabled": false,
+  "task": {
+    "path": "go-task"
+  },
 }`

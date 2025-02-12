@@ -39,6 +39,10 @@ var KeyBindings = `[
         "command": "-workbench.action.navigateForward",
         "when": "canNavigateForward"
     },
+    {
+        "key": "f5",
+        "command": "key-runner.run"
+    },
 ]`
 
 var Settings = `{

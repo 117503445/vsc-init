@@ -73,10 +73,23 @@ func getVscodeEngine() string {
 		log.Fatal().Err(err).Msg("exec")
 	}
 	output := string(outputByte)
-	// 4.96.4 b7ef8f9bd70cb5b342fa8ec8a0086bad676d8124 with Code 1.96.4
-	items := strings.Split(output, " ")
-	ver := items[len(items)-1]
-	ver = strings.TrimSpace(ver)
+
+	var ver string
+
+	if strings.Count(output, " ") == 4 {
+		// 4.96.4 b7ef8f9bd70cb5b342fa8ec8a0086bad676d8124 with Code 1.96.4
+		items := strings.Split(output, " ")
+		ver = items[len(items)-1]
+		ver = strings.TrimSpace(ver)
+	} else {
+		// 1.96.4
+		// b7ef8f9bd70cb5b342fa8ec8a0086bad676d8124
+		// x64
+		items := strings.Split(output, "\n")
+		ver = items[0]
+		ver = strings.TrimSpace(ver)
+	}
+
 	log.Info().Str("vscodeEngine", ver).Msg("")
 
 	return ver
@@ -159,7 +172,7 @@ func InstallLatestExts() {
 
 	taskCh := make(chan string)
 	var sg sync.WaitGroup
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		sg.Add(1)
 		go func() {
 			defer sg.Done()
@@ -195,7 +208,17 @@ func InstallLatestExts() {
 			log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
 		}
 	}
-
+	err = goutils.Download("https://github.com/117503445/vscode-key-runner/releases/latest/download/key-runner-0.0.1.vsix", "/tmp/exts/key-runner-0.0.1.vsix")
+	if err != nil {
+		log.Fatal().Err(err).Msg("DownloadFile")
+	}
+	cmds := []string{"code-server", "--install-extension", "/tmp/exts/key-runner-0.0.1.vsix"}
+	cmd := exec.Command(cmds[0], cmds[1:]...)
+	log.Info().Strs("cmds", cmds).Msg("")
+	err = cmd.Run()
+	if err != nil {
+		log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+	}
 }
 func getExtFileName(extName string, ver string) string {
 	return fmt.Sprintf("%s-%s.vsix", extName, ver)

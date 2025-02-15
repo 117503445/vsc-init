@@ -67,6 +67,11 @@ func queryExtsMeta() string {
 	return response
 }
 func getVscodeEngine() string {
+	// write config.yaml to prevent code-server log "Wrote default config file to /root/.config/code-server/config.yaml"
+	err := goutils.WriteText("/root/.config/code-server/config.yaml", "")
+	if err != nil {
+		log.Fatal().Err(err).Msg("WriteText")
+	}
 	cmds := []string{"code-server", "--version"}
 	outputByte, err := exec.Command(cmds[0], cmds[1:]...).Output()
 	if err != nil {

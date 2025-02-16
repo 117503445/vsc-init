@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 	"sync"
@@ -18,10 +19,22 @@ import (
 )
 
 func queryExtsMeta() string {
-	var filters []map[string]interface{}
-	for _, extName := range assets.Exts {
-		filters = append(filters, map[string]interface{}{
-			"criteria": []map[string]interface{}{
+	// var envExts string
+	envExtsStr := os.Getenv("EXTS")
+	exts := make([]string, 0)
+	if envExtsStr != "" {
+		envExts := strings.Split(envExtsStr, ",")
+		log.Info().Strs("exts", exts).Str("envExtsStr", envExtsStr).Msg("")
+		for _, extName := range envExts {
+			exts = append(exts, strings.TrimSpace(extName))
+		}
+	}
+	exts = append(exts, assets.Exts...)
+
+	var filters []map[string]any
+	for _, extName := range exts {
+		filters = append(filters, map[string]any{
+			"criteria": []map[string]any{
 				{
 					"filterType": 7,
 					"value":      extName,
@@ -32,7 +45,7 @@ func queryExtsMeta() string {
 		})
 	}
 
-	requestBody := map[string]interface{}{
+	requestBody := map[string]any{
 		"filters": filters,
 		"flags":   17, // 1(IncludeVersions) + 16(IncludeVersionProperties)
 		// https://github.com/microsoft/vscode/blob/12ae331012923024bedaf873ba4259a8c64db020/src/vs/platform/extensionManagement/common/extensionGalleryService.ts

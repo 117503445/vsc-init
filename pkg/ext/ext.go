@@ -21,18 +21,19 @@ import (
 func queryExtsMeta() string {
 	// var envExts string
 	envExtsStr := os.Getenv("EXTS")
-	exts := make([]string, 0)
 	if envExtsStr != "" {
+		exts := make([]string, 0)
 		envExts := strings.Split(envExtsStr, ",")
-		log.Info().Strs("exts", exts).Str("envExtsStr", envExtsStr).Msg("")
 		for _, extName := range envExts {
 			exts = append(exts, strings.TrimSpace(extName))
 		}
+		log.Info().Strs("exts", exts).Str("envExtsStr", envExtsStr).Msg("")
+		assets.Exts = append(exts, assets.Exts...)
 	}
-	exts = append(exts, assets.Exts...)
+	log.Info().Strs("assets.Exts", assets.Exts).Msg("")
 
 	var filters []map[string]any
-	for _, extName := range exts {
+	for _, extName := range assets.Exts {
 		filters = append(filters, map[string]any{
 			"criteria": []map[string]any{
 				{

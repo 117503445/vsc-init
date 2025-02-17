@@ -89,4 +89,7 @@ var Settings = `{
   "task": {
     "path": "go-task"
   },
+  "terminal.integrated.commandsToSkipShell": [
+    "key-runner.run"
+  ]
 }`

@@ -129,6 +129,18 @@ func isEngineValid(engine string, constraint string) (bool, error) {
 func InstallLatestExts() {
 	var err error
 
+	err = goutils.Download("https://github.com/117503445/vscode-key-runner/releases/latest/download/key-runner-0.0.1.vsix", "/tmp/exts/key-runner-0.0.1.vsix")
+	if err != nil {
+		log.Fatal().Err(err).Msg("DownloadFile")
+	}
+	cmds := []string{"code-server", "--install-extension", "/tmp/exts/key-runner-0.0.1.vsix"}
+	cmd := exec.Command(cmds[0], cmds[1:]...)
+	log.Info().Strs("cmds", cmds).Msg("")
+	err = cmd.Run()
+	if err != nil {
+		log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+	}
+
 	response := queryExtsMeta()
 	vscodeEngine := getVscodeEngine()
 
@@ -227,17 +239,7 @@ func InstallLatestExts() {
 			log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
 		}
 	}
-	err = goutils.Download("https://github.com/117503445/vscode-key-runner/releases/latest/download/key-runner-0.0.1.vsix", "/tmp/exts/key-runner-0.0.1.vsix")
-	if err != nil {
-		log.Fatal().Err(err).Msg("DownloadFile")
-	}
-	cmds := []string{"code-server", "--install-extension", "/tmp/exts/key-runner-0.0.1.vsix"}
-	cmd := exec.Command(cmds[0], cmds[1:]...)
-	log.Info().Strs("cmds", cmds).Msg("")
-	err = cmd.Run()
-	if err != nil {
-		log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
-	}
+
 }
 func getExtFileName(extName string, ver string) string {
 	return fmt.Sprintf("%s-%s.vsix", extName, ver)

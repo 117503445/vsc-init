@@ -64,6 +64,7 @@ var Settings = `{
     "-v",
     "-count=1"
   ],
+  "go.testTimeout": "24h",
   "go.toolsManagement.autoUpdate": true,
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.fontFamily": "UbuntuMono Nerd Font Mono,UbuntuMono NF,Microsoft YaHei Mono",

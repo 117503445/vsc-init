@@ -89,5 +89,8 @@ var Settings = `{
   "terminal.integrated.commandsToSkipShell": [
     "key-runner.run"
   ],
-  "terminal.integrated.scrollback": 10000
+  "terminal.integrated.scrollback": 10000,
+  "files.exclude": {
+    "**/.git": false
+  },
 }`

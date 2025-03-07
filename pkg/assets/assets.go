@@ -69,10 +69,10 @@ var Settings = `{
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.fontFamily": "UbuntuMono Nerd Font Mono,UbuntuMono NF,Microsoft YaHei Mono",
   "terminal.integrated.fontWeightBold": "normal",
-  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.defaultProfile.linux": "zsh",
   "terminal.integrated.profiles.linux": {
-    "fish": {
-      "path": "fish"
+    "zsh": {
+      "path": "zsh"
     }
   },
   // "window.title": "${rootName}",

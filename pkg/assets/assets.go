@@ -94,4 +94,5 @@ var Settings = `{
   "files.exclude": {
     "**/.git": false
   },
+  "security.workspace.trust.enabled": false,
 }`

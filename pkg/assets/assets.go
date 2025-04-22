@@ -16,7 +16,8 @@ var Exts = []string{"alibaba-cloud.tongyi-lingma",
 	"mhutchie.git-graph",
 	"ms-python.python",
 	"mechatroner.rainbow-csv",
-	"eamodio.gitlens"}
+	"eamodio.gitlens",
+  "detachhead.basedpyright"}
 
 var KeyBindings = `[
     {
@@ -95,4 +96,5 @@ var Settings = `{
     "**/.git": false
   },
   "security.workspace.trust.enabled": false,
+  "basedpyright.analysis.typeCheckingMode": "standard",
 }`

@@ -98,4 +98,7 @@ var Settings = `{
   },
   "security.workspace.trust.enabled": false,
   "basedpyright.analysis.typeCheckingMode": "standard",
+  "Lingma.DisplayLanguage": "简体中文",
+  "Lingma.PreferredLanguage for AI Chat": "简体中文",
+  "Lingma.PreferredLanguage forCommitMessage": "简体中文"
 }`

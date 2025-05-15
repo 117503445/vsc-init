@@ -1,6 +1,7 @@
 package assets
 
-var Exts = []string{"alibaba-cloud.tongyi-lingma",
+var Exts = []string{
+	"alibaba-cloud.tongyi-lingma",
 	"ms-azuretools.vscode-docker",
 	"ms-ceintl.vscode-language-pack-zh-hans",
 	"pkief.material-icon-theme",
@@ -15,11 +16,13 @@ var Exts = []string{"alibaba-cloud.tongyi-lingma",
 	"redhat.vscode-yaml",
 	"mhutchie.git-graph",
 	"ms-python.python",
+	"ms-python.black-formatter",
+	"detachhead.basedpyright",
 	"mechatroner.rainbow-csv",
 	"eamodio.gitlens",
-	"detachhead.basedpyright",
-	"ms-python.black-formatter",
 	"fwcd.kotlin",
+	"nvarner.typst-lsp",
+	"tomoki1207.pdf",
 }
 
 var KeyBindings = `[

@@ -18,7 +18,9 @@ var Exts = []string{"alibaba-cloud.tongyi-lingma",
 	"mechatroner.rainbow-csv",
 	"eamodio.gitlens",
 	"detachhead.basedpyright",
-	"ms-python.black-formatter"}
+	"ms-python.black-formatter",
+	"fwcd.kotlin",
+}
 
 var KeyBindings = `[
     {

@@ -20,7 +20,7 @@ EXTS=golang.go,njzy.stats-bar vsc-init # 使用 EXTS 环境变量安装额外的
 
 `vsc-init` 会根据 `pkg/assets/assets.go`，对于本地已安装的 Code Server，进行
 
-- 下载安装拓展
+- 基于本地拓展版本，计算出需要安装/升级的拓展列表，并下载安装
 - 写入 Settings 配置
 - 写入 Keybindings 配置
 

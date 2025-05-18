@@ -1,27 +1,31 @@
 package assets
 
 var Exts = []string{
-	"alibaba-cloud.tongyi-lingma",
-	"ms-azuretools.vscode-docker",
-	"ms-ceintl.vscode-language-pack-zh-hans",
-	"pkief.material-icon-theme",
+	// 语言
 	"jnoortheen.nix-ide",
 	"golang.go",
-	"tamasfe.even-better-toml",
-	"bodil.prettier-toml",
-	"humao.rest-client",
-	"njzy.stats-bar",
-	"zxh404.vscode-proto3",
-	"redhat.vscode-xml",
-	"redhat.vscode-yaml",
-	"mhutchie.git-graph",
 	"ms-python.python",
 	"ms-python.black-formatter",
 	"detachhead.basedpyright",
-	"mechatroner.rainbow-csv",
-	"eamodio.gitlens",
 	"fwcd.kotlin",
+	"tamasfe.even-better-toml",
+	"bodil.prettier-toml",
+	"zxh404.vscode-proto3",
+	"redhat.vscode-xml",
+	"redhat.vscode-yaml",
 	"nvarner.typst-lsp",
+	// Git
+	"mhutchie.git-graph", // 清晰的 Git 可视化，操作便捷
+	"eamodio.gitlens",    // 显示每一行代码的提交者
+	// IDE
+	"ms-ceintl.vscode-language-pack-zh-hans",
+	"pkief.material-icon-theme",
+	"njzy.stats-bar", // 显示 CPU、内存、网络、磁盘占用
+	"mechatroner.rainbow-csv",
+  // Other
+	"alibaba-cloud.tongyi-lingma",
+	"ms-azuretools.vscode-docker",
+	"humao.rest-client", // 替代 Postman
 	"tomoki1207.pdf",
 }
 

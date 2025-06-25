@@ -16,7 +16,6 @@ var Exts = []string{
 	"nvarner.typst-lsp",
 	// Git
 	"mhutchie.git-graph", // 清晰的 Git 可视化，操作便捷
-	"eamodio.gitlens",    // 显示每一行代码的提交者
 	// IDE
 	"ms-ceintl.vscode-language-pack-zh-hans",
 	"pkief.material-icon-theme",
@@ -109,5 +108,6 @@ var Settings = `{
   "basedpyright.analysis.typeCheckingMode": "standard",
   "Lingma.DisplayLanguage": "简体中文",
   "Lingma.PreferredLanguage for AI Chat": "简体中文",
-  "Lingma.PreferredLanguage forCommitMessage": "简体中文"
+  "Lingma.PreferredLanguage forCommitMessage": "简体中文",
+  "git.blame.editorDecoration.enabled": true
 }`

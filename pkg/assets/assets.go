@@ -8,6 +8,7 @@ var Exts = []string{
 	"ms-python.black-formatter",
 	"detachhead.basedpyright",
 	"fwcd.kotlin",
+  "rust-lang.rust-analyzer",
 	"tamasfe.even-better-toml",
 	"bodil.prettier-toml",
 	"zxh404.vscode-proto3",
@@ -109,5 +110,6 @@ var Settings = `{
   "Lingma.DisplayLanguage": "简体中文",
   "Lingma.PreferredLanguage for AI Chat": "简体中文",
   "Lingma.PreferredLanguage forCommitMessage": "简体中文",
-  "git.blame.editorDecoration.enabled": true
+  "git.blame.editorDecoration.enabled": true,
+  "rust-analyzer.server.path": "rust-analyzer"
 }`

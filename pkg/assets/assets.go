@@ -27,6 +27,7 @@ var Exts = []string{
 	"ms-azuretools.vscode-docker",
 	"humao.rest-client", // 替代 Postman
 	"tomoki1207.pdf",
+  "iliazeus.vscode-ansi", // 显示 ANSI 文本颜色
 }
 
 var KeyBindings = `[

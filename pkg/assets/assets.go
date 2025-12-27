@@ -23,7 +23,7 @@ var Exts = []string{
 	"njzy.stats-bar", // 显示 CPU、内存、网络、磁盘占用
 	"mechatroner.rainbow-csv",
   // Other
-	"alibaba-cloud.tongyi-lingma",
+	// "alibaba-cloud.tongyi-lingma",
 	"ms-azuretools.vscode-docker",
 	"humao.rest-client", // 替代 Postman
 	"tomoki1207.pdf",

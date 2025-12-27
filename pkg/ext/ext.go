@@ -201,6 +201,8 @@ func InstallLatestExts() {
 		return "/tmp/exts/" + getExtFileName(ext, latestExtVers[ext])
 	}
 
+	log.Info().Strs("assets.Exts", assets.Exts).Msg("start to download exts")
+
 	taskCh := make(chan string)
 	var sg sync.WaitGroup
 	for range 5 {
@@ -229,14 +231,18 @@ func InstallLatestExts() {
 	close(taskCh)
 	sg.Wait()
 
+	log.Info().Msg("start to install exts")
+
 	for _, ext := range assets.Exts {
 		extPath := getExtPath(ext)
-		cmds := []string{"code-server", "--install-extension", extPath}
-		cmd := exec.Command(cmds[0], cmds[1:]...)
-		log.Info().Strs("cmds", cmds).Msg("")
-		err := cmd.Run()
-		if err != nil {
-			log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+		for _, command := range []string{"code-server", "cursor"} {
+			cmds := []string{command, "--install-extension", extPath}
+			cmd := exec.Command(cmds[0], cmds[1:]...)
+			log.Info().Strs("cmds", cmds).Msg("")
+			err := cmd.Run()
+			if err != nil {
+				log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+			}
 		}
 	}
 

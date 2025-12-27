@@ -229,17 +229,36 @@ func InstallLatestExts() {
 	close(taskCh)
 	sg.Wait()
 
-	for _, ext := range assets.Exts {
-		extPath := getExtPath(ext)
-		cmds := []string{"code-server", "--install-extension", extPath}
-		cmd := exec.Command(cmds[0], cmds[1:]...)
-		log.Info().Strs("cmds", cmds).Msg("")
-		err := cmd.Run()
-		if err != nil {
-			log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+	installExts := func(command string) {
+		// check if command is installed
+		{
+			cmds := []string{command, "--version"}
+			outputByte, err := exec.Command(cmds[0], cmds[1:]...).Output()
+			if err != nil {
+				log.Info().Err(err).Strs("cmds", cmds).Msg("exec")
+				return
+			}
+			output := string(outputByte)
+			if output == "" {
+				log.Info().Str("command", command).Msg("command is not installed")
+				return
+			}
+		}
+		log.Info().Str("command", command).Msg("command is installed")
+
+		for _, ext := range assets.Exts {
+			extPath := getExtPath(ext)
+			cmds := []string{command, "--install-extension", extPath}
+			cmd := exec.Command(cmds[0], cmds[1:]...)
+			log.Info().Strs("cmds", cmds).Msg("")
+			err := cmd.Run()
+			if err != nil {
+				log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+			}
 		}
 	}
-
+	installExts("cursor")
+	installExts("code-server")
 }
 func getExtFileName(extName string, ver string) string {
 	return fmt.Sprintf("%s-%s.vsix", extName, ver)

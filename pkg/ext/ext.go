@@ -219,8 +219,9 @@ func InstallLatestExts() {
 					if err != nil {
 						log.Fatal().Err(err).Msg("DownloadFile")
 					}
+				}else{
+					log.Info().Str("extPath", extPath).Msg("Already exists")
 				}
-
 			}
 			log.Info().Msg("Done")
 		}()

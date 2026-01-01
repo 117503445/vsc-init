@@ -242,7 +242,7 @@ func InstallLatestExts() {
 			log.Info().Strs("cmds", cmds).Msg("")
 			err := cmd.Run()
 			if err != nil {
-				log.Fatal().Err(err).Strs("cmds", cmds).Msg("exec")
+				log.Error().Err(err).Strs("cmds", cmds).Msg("exec")
 			}
 		}
 	}
